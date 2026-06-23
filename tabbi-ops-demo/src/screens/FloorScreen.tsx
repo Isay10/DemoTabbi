@@ -1,9 +1,10 @@
 // Floor view: header, search, sector/status filters, table card grid.
 
 import React from "react";
-import { View, FlatList, StyleSheet, SafeAreaView } from "react-native";
+import { Text, Pressable, FlatList, StyleSheet, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import type { RootStackParamList } from "../navigation/AppNavigator";
 import type { RestaurantTable } from "../domain/types";
@@ -21,7 +22,7 @@ import { SectorFilter } from "../components/tables/SectorFilter";
 import { StatusFilter } from "../components/tables/StatusFilter";
 import { TableCard } from "../components/tables/TableCard";
 
-import { colors, spacing } from "../theme/tokens";
+import { colors, spacing, radius, fontSize, fontWeight } from "../theme/tokens";
 
 const sectorMap: Record<string, string> = Object.fromEntries(
   mockSectors.map((s) => [s.id, s.name])
@@ -45,6 +46,7 @@ function ConnectedTableCard({ table }: { table: RestaurantTable }) {
 
 export function FloorScreen() {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const tables = useAppSelector(selectFilteredTables);
   const searchQuery = useAppSelector(selectSearchQuery);
   const sectorFilter = useAppSelector(selectSectorFilter);
@@ -52,7 +54,19 @@ export function FloorScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <AppHeader title="Mesas" />
+      <AppHeader
+        title="Mesas"
+        rightIcon={
+          <Pressable
+            onPress={() => navigation.navigate("AiInsights")}
+            style={styles.insightsButton}
+            hitSlop={8}
+          >
+            <FontAwesome5 name="magic" size={13} color={colors.primary} />
+            <Text style={styles.insightsLabel}>Insights</Text>
+          </Pressable>
+        }
+      />
       <SearchInput
         value={searchQuery}
         onChangeText={(text) => dispatch(setSearchQuery(text))}
@@ -84,6 +98,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  insightsButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.xs,
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: radius.pill,
+  },
+  insightsLabel: {
+    color: colors.primary,
+    fontSize: fontSize.sm,
+    fontWeight: fontWeight.bold,
   },
   flatList: {
     flex: 1,

@@ -17,7 +17,7 @@ export const mockTables: RestaurantTable[] = [
   // Salón — in_use
   {
     id: "t4", sectorId: "s1", number: 4, name: "Mesa 4", capacity: { min: 1, max: 8 }, status: "in_use",
-    partySize: 4, waiterName: "Carlos", openedAt: new Date(Date.now() - 45 * 60000).toISOString(),
+    partySize: 4, waiterName: "Carlos", openedAt: new Date(Date.now() - 95 * 60000).toISOString(),
     orderId: "o1", sortOrder: 4,
   },
   // Terraza — available
