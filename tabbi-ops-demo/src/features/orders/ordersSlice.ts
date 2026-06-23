@@ -15,8 +15,10 @@ const initialState: OrdersState = {
 };
 
 function findOrderByTableId(state: OrdersState, tableId: string): Order | undefined {
+  // Skip paid orders so a freed table's old order is never reused by a new cycle.
   for (const id of state.allIds) {
-    if (state.byId[id].tableId === tableId) return state.byId[id];
+    const order = state.byId[id];
+    if (order.tableId === tableId && order.status !== "paid") return order;
   }
   return undefined;
 }
