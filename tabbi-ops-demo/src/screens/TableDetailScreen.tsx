@@ -23,7 +23,7 @@ import {
 } from "../features/tables/tableSelectors";
 import { selectOrderByTableId } from "../features/orders/orderSelectors";
 import { openTable, closeTable, payAndFreeTable } from "../features/tables/tablesSlice";
-import { sendCommand } from "../features/orders/ordersSlice";
+import { sendCommand, markAsPaid } from "../features/orders/ordersSlice";
 
 import { AppHeader } from "../components/common/AppHeader";
 import { AppButton } from "../components/common/AppButton";
@@ -100,6 +100,7 @@ export function TableDetailScreen({ route, navigation }: Props) {
 
   const onPay = () =>
     handle(canPayTable(table), () => {
+      dispatch(markAsPaid({ tableId }));
       dispatch(payAndFreeTable(tableId));
       navigation.goBack();
     });
