@@ -7,10 +7,11 @@ import { colors, spacing, fontSize, fontWeight } from "../../theme/tokens";
 type Props = {
   title: string;
   rightIcon?: React.ReactNode;
+  leftIcon?: React.ReactNode;
   onBack?: () => void;
 };
 
-export function AppHeader({ title, rightIcon, onBack }: Props) {
+export function AppHeader({ title, leftIcon, rightIcon, onBack }: Props) {
   return (
     <View style={styles.container}>
       {onBack ? (
@@ -18,6 +19,7 @@ export function AppHeader({ title, rightIcon, onBack }: Props) {
           <Text style={styles.backText}>‹ Volver</Text>
         </Pressable>
       ) : null}
+      {leftIcon ? <View style={styles.left}>{leftIcon}</View> : null}
       <Text style={styles.title}>{title}</Text>
       {rightIcon ? <View style={styles.right}>{rightIcon}</View> : null}
     </View>
@@ -42,6 +44,11 @@ const styles = StyleSheet.create({
   right: {
     position: "absolute",
     right: spacing.lg,
+    bottom: spacing.md,
+  },
+  left: {
+    position: "absolute",
+    left: spacing.lg,
     bottom: spacing.md,
   },
   back: {

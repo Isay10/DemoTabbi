@@ -1,8 +1,12 @@
 // Pure table operational rules. No classes, no side effects.
 
 import type { RestaurantTable, Order, OperationalValidationResult } from "./types";
+import { isWithinBusinessHours } from "./time";
 
 export function canOpenTable(table: RestaurantTable): OperationalValidationResult {
+  if (!isWithinBusinessHours(new Date())) {
+    return { valid: false, reason: "outside_business_hours" };
+  }
   if (table.status === "available" || table.status === "reserved") {
     return { valid: true };
   }

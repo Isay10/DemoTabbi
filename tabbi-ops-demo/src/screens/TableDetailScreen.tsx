@@ -48,6 +48,7 @@ const reasonLabels: Record<string, string> = {
   table_not_found: "Mesa no encontrada.",
   order_not_found: "Pedido no encontrado.",
   product_not_found: "Producto no encontrado.",
+  outside_business_hours: "El local está cerrado.",
 };
 
 export function TableDetailScreen({ route, navigation }: Props) {

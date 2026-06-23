@@ -76,5 +76,6 @@ export type OperationalValidationResult =
         | "table_not_ready_to_bill"
         | "table_not_found"
         | "order_not_found"
-        | "product_not_found";
+        | "product_not_found"
+        | "outside_business_hours";
     };
