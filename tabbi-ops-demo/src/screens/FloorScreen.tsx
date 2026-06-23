@@ -72,6 +72,7 @@ export function FloorScreen() {
         keyExtractor={(item) => item.id}
         numColumns={2}
         renderItem={({ item }) => <ConnectedTableCard table={item} />}
+        style={styles.flatList}
         contentContainerStyle={styles.list}
         ListEmptyComponent={<EmptyState message="No hay mesas para este filtro." />}
       />
@@ -81,8 +82,11 @@ export function FloorScreen() {
 
 const styles = StyleSheet.create({
   container: {
-   /*  flex: 1, */
+    flex: 1,
     backgroundColor: colors.background,
+  },
+  flatList: {
+    flex: 1,
   },
   list: {
     padding: spacing.sm,

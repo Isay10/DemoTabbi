@@ -35,7 +35,8 @@ export function SectorFilter({ sectors, selected, onSelect }: Props) {
 
 const styles = StyleSheet.create({
   scroll: {
-    alignSelf: "flex-start",
+    flexGrow: 0,
+    flexShrink: 0,
   },
   content: {
     paddingHorizontal: spacing.md,
