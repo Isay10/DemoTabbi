@@ -27,7 +27,7 @@ export function AppHeader({ title, rightIcon, onBack }: Props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
-    paddingTop: Platform.OS === "ios" ? 44 : 24,
+    paddingTop: Platform.OS === "ios" ? 64 : 44,
     paddingBottom: spacing.md,
     paddingHorizontal: spacing.lg,
     flexDirection: "row",
