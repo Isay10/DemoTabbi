@@ -6,6 +6,12 @@
       "sourceType": "github",
       "skillPath": "skills/caveman/SKILL.md",
       "computedHash": "b0e7741886c0c32270cedc1a2fc21c2879d90964d3ce00f24952de7064613404"
+    },
+    "ponytail": {
+      "source": "dietrichgebert/ponytail",
+      "sourceType": "github",
+      "skillPath": "skills/ponytail/SKILL.md",
+      "computedHash": "ceef852b0aa6ba5fe1db2b5976c2383a7998dba562f62fed0142193a894ece53"
     }
   }
 }
