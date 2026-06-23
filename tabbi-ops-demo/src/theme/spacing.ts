@@ -1,3 +1,1 @@
-// TODO: Spacing scale (xs, sm, md, lg, xl, xxl).
-
-export const spacingPlaceholder = {};
+export { spacing, radius } from "./tokens";

@@ -1,3 +1,1 @@
-// TODO: Font sizes and weights.
-
-export const typographyPlaceholder = {};
+export { fontSize, fontWeight } from "./tokens";

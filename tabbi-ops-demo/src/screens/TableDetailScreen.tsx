@@ -1,6 +1,12 @@
-// TODO: Single table detail view with order, products, total, actions (open, close, pay/free).
-// Allow add product, send command, close, pay/free.
+// TODO (Task 4): single table detail — order, products, total, actions.
+// Placeholder accepts route params so navigation typechecks.
 
-import React from 'react';
+import React from "react";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "../navigation/AppNavigator";
 
-export const TableDetailScreen: React.FC = () => null;
+type Props = NativeStackScreenProps<RootStackParamList, "TableDetail">;
+
+export function TableDetailScreen(_props: Props) {
+  return null;
+}
