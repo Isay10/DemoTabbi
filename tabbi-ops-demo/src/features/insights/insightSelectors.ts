@@ -1,4 +1,5 @@
-// TODO: Memoized selectors for operational insights.
-// Derives insights from tables/orders state via insightService.
+// Insight selectors. Stub — Task 6 fills rule-based insight derivation.
 
-export const insightSelectorsPlaceholder = {};
+import type { OperationalInsight } from "../../domain/types";
+
+export const selectInsights = (): OperationalInsight[] => [];
