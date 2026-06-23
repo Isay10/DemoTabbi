@@ -1,7 +1,7 @@
 // Floor view: header, search, sector/status filters, table card grid.
 
 import React from "react";
-import { Text, Pressable, FlatList, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, Pressable, FlatList, StyleSheet, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -56,6 +56,16 @@ export function FloorScreen() {
     <SafeAreaView style={styles.container}>
       <AppHeader
         title="Mesas"
+        leftIcon={
+          <Pressable
+            onPress={() => navigation.navigate("Timeline")}
+            style={styles.insightsButton}
+            hitSlop={8}
+          >
+            <FontAwesome5 name="clock" size={13} color={colors.primary} />
+            <Text style={styles.insightsLabel}>Horarios</Text>
+          </Pressable>
+        }
         rightIcon={
           <Pressable
             onPress={() => navigation.navigate("AiInsights")}

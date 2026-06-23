@@ -7,12 +7,14 @@ import { FloorScreen } from "../screens/FloorScreen";
 import { TableDetailScreen } from "../screens/TableDetailScreen";
 import { ProductPickerScreen } from "../screens/ProductPickerScreen";
 import { AiInsightsScreen } from "../screens/AiInsightsScreen";
+import { TimelineScreen } from "../screens/TimelineScreen";
 
 export type RootStackParamList = {
   Floor: undefined;
   TableDetail: { tableId: string };
   ProductPicker: { tableId: string };
   AiInsights: undefined;
+  Timeline: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -25,6 +27,7 @@ export function AppNavigator() {
         <Stack.Screen name="TableDetail" component={TableDetailScreen} />
         <Stack.Screen name="ProductPicker" component={ProductPickerScreen} />
         <Stack.Screen name="AiInsights" component={AiInsightsScreen} />
+        <Stack.Screen name="Timeline" component={TimelineScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
