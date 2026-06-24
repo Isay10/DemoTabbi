@@ -25,6 +25,91 @@ available → in_use → closed → available
 
 ---
 
+## Cómo se construyó: Spec-Driven Development (SDD) con agentes de IA
+
+Este proyecto se construyó con un agente de codificación (Claude Code) bajo una disciplina **Spec-Driven Development**. El punto no es "la IA escribió el código", sino que **el humano definió specs, guardrails y roles de agente acotados por adelantado**, y la IA ejecutó dentro de esos rieles con gates de verificación en cada paso. Las carpetas `docs/` y `agents/` son la evidencia de ese proceso, no un agregado posterior.
+
+> Tesis para el rol Sr FE + IA: dominar la IA es **dirigirla, acotarla y verificarla** — no delegar a ciegas. El valor está en el control de scope, la prevención de alucinación/scope-creep y la trazabilidad de decisiones.
+
+### El bucle de trabajo (por cada feature)
+
+```
+1. Leer contexto          (CLAUDE.md → docs/*)
+2. Chequear guardrails     (docs/10_GUARDRAILS.md)
+3. Definir scope mínimo    (un vertical slice, nada de infra futura)
+4. Specs antes que código  (actualizar docs si cambia la arquitectura)
+5. Implementar el slice más chico útil
+6. Gate: tsc --noEmit en CERO
+7. Actualizar TASKS / DECISIONS
+8. Pase de QA (qa-reviewer) antes de dar por cerrada la feature
+```
+
+Cada feature se entregó como **vertical slice** siguiendo `docs/06_FEATURE_ROADMAP.md` (dominio → store → FloorScreen → TableDetail → ProductPicker → Insights → Timeline), nunca como infraestructura especulativa.
+
+### Specs como fuente de verdad — `docs/`
+
+13 documentos numerados; el código se deriva de ellos, no al revés.
+
+| Doc | Rol |
+|---|---|
+| `00_PROJECT_CONTEXT` | Propósito, estrategia, qué reusar de Woki y qué descartar |
+| `01_PRODUCT_SPEC` | Pantallas, estados, copy operacional |
+| `02_TECH_SPEC` | Stack, reglas de estado y de TypeScript |
+| `03_UI_STYLE_CONTEXT` | Tokens de diseño y personalidad visual POS |
+| `04_ARCHITECTURE` | Capas, data flow y frontera del servicio de IA |
+| `05_DOMAIN_MODEL` | Entidades, tipos, transiciones de estado |
+| `06_FEATURE_ROADMAP` | Fases / orden de vertical slices |
+| `07_ACCEPTANCE_CRITERIA` | Criterios por pantalla + demo path |
+| `08_TASKS` | Tareas agrupadas por commit |
+| `09_DECISIONS` | 14 decisiones técnicas con su justificación |
+| `10_GUARDRAILS` | Lo que **no** se debe hacer |
+| `11_PROMPTS` | Plantillas de prompt por feature |
+| `12_AGENT_WORKFLOW` | Modos de falla → agente que los previene |
+
+### Agentes como roles acotados — `agents/`
+
+Cada agente es un **guardrail contra un modo de falla concreto** (`docs/12_AGENT_WORKFLOW.md`), no un "asistente genérico".
+
+| Agente | Responsabilidad | Modo de falla que previene |
+|---|---|---|
+| `product-owner` | Valida scope y valor MVP | Explosión de scope (POS completo, auth, pagos) |
+| `rn-architect` | Estructura RN y navegación | Port web→mobile |
+| `woki-adapter` | Reusa conceptos de Woki sin portar UI desktop | Port web→mobile |
+| `domain-modeler` | Tipos, mock data, reglas puras | Lógica de negocio dentro de la UI |
+| `redux-state-agent` | Slices, selectors, estado derivado | Lógica de negocio dentro de la UI |
+| `ui-ux-agent` | Consistencia visual POS | Deriva visual (violeta, dark, fintech) |
+| `ai-insights-agent` | Insights rule-based detrás de servicio tipado | IA falsa/peligrosa (chatbot, SDK, claves) |
+| `feature-implementer` | Implementa vertical slices acotados | Cambios fuera de los archivos permitidos |
+| `qa-reviewer` | Criterios, edge cases, regresiones, guardrails | Todos los anteriores (gate final) |
+
+### Disciplina de prompts — `docs/11_PROMPTS.md`
+
+Ningún prompt es "construí la app". Todos siguen la misma plantilla:
+
+```txt
+Use the [agent-name] agent.
+Read: docs/[relevantes].md + docs/10_GUARDRAILS.md
+Task: [tarea específica]
+Allowed files: [lista]
+Forbidden: [acciones prohibidas]
+Acceptance criteria: [checklist verificable]
+```
+
+Esto fija **scope, archivos permitidos y criterios de aceptación** antes de tocar código.
+
+### Verificación y anti-alucinación
+
+- **Gate de tipos**: `tsc --noEmit` en cero errores después de cada slice (sin `any`, payloads tipados, uniones para los `reason` de validación).
+- **`qa-reviewer`** corre 7 niveles de review (scope, flujo, reglas de negocio, arquitectura, RN, UI, tipos/tests), clasifica hallazgos por severidad y aplica un **"hallucination firewall"**: no afirma que algo funciona/compila sin haberlo corrido o inspeccionado (`Verified by running: ...` / `Not verified: ...`).
+
+### Guardrails en acción (ejemplos reales de este build)
+
+- **Pedido de gradiente violeta**: se pidió el botón con el gradiente naranja→violeta oficial de Tabbi y "sin agregar libs". Chocaba con dos guardrails (`no violet brand` y el de dependencias — un gradiente real necesita `expo-linear-gradient`). En lugar de implementarlo a ciegas, se **explicitó el conflicto y se propuso una alternativa MVP-safe** (pill blanco + ícono *magic wand* de `@expo/vector-icons`, sin lib nueva ni violeta).
+- **Regla de horario comercial**: agregar el gate `canOpenTable` requirió **extender la unión `OperationalValidationResult`** con un literal `reason` nuevo en vez de usar `any` — type-safe y verificado por `tsc`.
+- **Pase de QA**: encontró y corrigió un bug de estado (una mesa liberada volvía a mostrar su pedido viejo) ajustando la relación selector/reducer vía `table.orderId`, y lo **verificó con un smoke test del bundle (HTTP 200)** — no solo afirmado.
+
+---
+
 ## Stack
 
 | Área | Tecnología |
