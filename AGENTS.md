@@ -19,3 +19,4 @@
 - ui-ux-agent: owns visual consistency with Tabbi-style mobile POS UX.
 - qa-reviewer: checks acceptance criteria, edge cases and regressions.
 - feature-implementer: implements scoped vertical slices.
+- test-engineer: writes/maintains Jest tests for pure logic (domain, reducers, selectors, insights).
