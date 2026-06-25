@@ -122,6 +122,7 @@ Esto fija **scope, archivos permitidos y criterios de aceptación** antes de toc
 | Navegación | React Navigation 7 (native-stack) |
 | Íconos | `@expo/vector-icons` (FontAwesome5) |
 | Datos | Mock local determinista (sin backend) |
+| Tests | Jest 30 · ts-jest (lógica pura, sin render RN) |
 
 No se usan: Ant Design, SCSS Modules, drag & drop, APIs DOM, SDKs de IA, ni claves de API.
 
@@ -137,12 +138,21 @@ npx expo start        # escanear el QR con Expo Go
 Typecheck:
 
 ```bash
-npx tsc --noEmit
-# en este entorno (node_modules híbrido npm/pnpm) usar:
-# node node_modules/typescript/bin/tsc --noEmit
+node node_modules/typescript/bin/tsc --noEmit
 ```
 
-> El gate del proyecto es **typecheck en cero errores**. No hay tests automatizados (fuera del scope del MVP).
+Tests:
+
+```bash
+npm test              # suite completa (51 tests)
+npm run test:watch    # modo watch
+npx jest src/domain   # solo una carpeta
+npx jest -t "empty"   # filtrar por nombre de test
+```
+
+> En Windows PowerShell puede requerirse `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` antes de correr scripts de npm.
+
+Los tests cubren **lógica pura únicamente** (dominio, reducers, selectors, insight service) usando `ts-jest` con `testEnvironment: node` — sin render de componentes React Native. El gate de integración es `tsc --noEmit` en cero errores.
 
 ---
 
@@ -275,7 +285,7 @@ Producción:  App → Backend API → proveedor IA → Backend API → App
 - **Native-stack** en vez de tabs: navegación más simple y estable; los accesos a Timeline/Insights viven en el header de Floor.
 - **Timeline**: `.map()` en vez de `FlatList` anidada (evita el warning de VirtualizedList dentro de ScrollView con ~10 filas), y `ScrollView` vertical + horizontal sin librerías de sincronización.
 - **Gate de horario time-dependent**: simple y realista, pero obliga a demostrar dentro del horario comercial.
-- **Sin tests automatizados**: fuera del scope del MVP; el gate de calidad es `tsc --noEmit` en cero.
+- **Tests de lógica pura con Jest**: 51 tests sobre dominio, reducers, selectors e insight service (`ts-jest`, `testEnvironment: node`). Sin render de componentes — el graph de imports de la lógica no toca React Native, así que el preset es mínimo. El gate de tipos es `tsc --noEmit` en cero.
 
 ---
 
